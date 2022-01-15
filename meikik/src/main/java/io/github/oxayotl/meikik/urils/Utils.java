@@ -36,10 +36,9 @@ public class Utils {
 			return (String) clazz.getMethod("shortName").invoke(clazz.getConstructor().newInstance());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn("Unable to instantiate BBcode class " + clazz.getCanonicalName(), e);
+			return null;
 		}
-		return null;
 	}
 
 	public static List<BBCodeTag> parseTagString(String value) {
@@ -52,7 +51,6 @@ public class Utils {
 							return (BBCodeTag) clazz.getConstructor().newInstance();
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 								| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-							// TODO Auto-generated catch block
 							log.warn("Unable to instantiate BBcode class " + shortname, e);
 							return null;
 						}
