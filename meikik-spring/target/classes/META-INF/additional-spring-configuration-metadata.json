@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "meikik.default-allowed-tags",
+			"type": "java.lang.String",
+			"description": "Define which tags are allowed by default in bbcode elements."
+		}
+	]
+}
