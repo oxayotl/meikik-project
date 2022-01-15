@@ -74,7 +74,7 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 						result.append(currentlyOpenedTags.get(j).buildEndingHtml());
 						currentlyOpenedTags.remove(j);
 						currentlyOpenedTagsHtml.remove(j);
-						for (j = j; j < currentlyOpenedTags.size(); j++) {
+						for (; j < currentlyOpenedTags.size(); j++) {
 							result.append(currentlyOpenedTagsHtml.get(j));
 						}
 					}

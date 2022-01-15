@@ -10,27 +10,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import io.github.oxayotl.meikik.domain.Tag;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
-import io.github.oxayotl.meikik.tag.impl.Bold;
-import io.github.oxayotl.meikik.tag.impl.Italic;
-import io.github.oxayotl.meikik.tag.impl.Url;
 
 public class Utils {
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Utils.class);
-
-	private static BBCodeTag findBbCodeTag(Tag tag) {
-		switch (tag) {
-		case B:
-			return new Bold();
-		case I:
-			return new Italic();
-		case URL:
-			return new Url();
-		default:
-			throw new RuntimeException("Unknown tag: " + tag);
-		}
-	}
 
 	public static Set<Class> findAllClassesUsingClassLoader(String packageName) {
 		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
@@ -63,8 +46,8 @@ public class Utils {
 		List<BBCodeTag> tags = new ArrayList<>();
 		Set<Class> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");
 		for (String shortname : value.split(",")) {
-			Optional<BBCodeTag> bbcode = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz))).findFirst()
-					.map(clazz -> {
+			Optional<BBCodeTag> bbcode = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz)))
+					.findFirst().map(clazz -> {
 						try {
 							return (BBCodeTag) clazz.getConstructor().newInstance();
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException

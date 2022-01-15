@@ -3,7 +3,6 @@ package io.github.oxayotl.meikik.service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.oxayotl.meikik.domain.Tag;
 import io.github.oxayotl.meikik.domain.TagReplacement;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
@@ -21,26 +20,6 @@ public class TagService {
 			return new TagReplacement(replacement, replacedCharacters, argument);
 		}
 		return null;
-	}
-
-	/**
-	 * Find the regular expression identifiying the opening tag.
-	 * 
-	 * @param id the identifier.
-	 * @return the enum.
-	 */
-	public static String findOpeningRegEx(Tag tag) {
-
-		switch (tag) {
-		case B:
-			return "\\[b]";
-		case I:
-			return "\\[i]";
-		case URL:
-			return "\\[url=&quot;(" + urlRegex + ")&quot;]";
-		default:
-			throw new RuntimeException("Unknown tag: " + tag);
-		}
 	}
 
 	public static TagReplacement processEndRegEx(BBCodeTag bbTag, String string) {
