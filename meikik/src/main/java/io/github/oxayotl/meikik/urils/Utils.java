@@ -15,14 +15,14 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
 public class Utils {
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Utils.class);
 
-	public static Set<Class> findAllClassesUsingClassLoader(String packageName) {
+	public static Set<Class<?>> findAllClassesUsingClassLoader(String packageName) {
 		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName))
 				.collect(Collectors.toSet());
 	}
 
-	private static Class getClass(String className, String packageName) {
+	private static Class<?> getClass(String className, String packageName) {
 		try {
 			return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
 		} catch (ClassNotFoundException e) {
@@ -31,9 +31,9 @@ public class Utils {
 		return null;
 	}
 
-	private static String findShortName(Class clazz) {
+	private static String findShortName(Class<?> clazz) {
 		try {
-			return (String) clazz.getMethod("shortName", null).invoke(clazz.getConstructor().newInstance(), null);
+			return (String) clazz.getMethod("shortName").invoke(clazz.getConstructor().newInstance());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException | InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -44,7 +44,7 @@ public class Utils {
 
 	public static List<BBCodeTag> parseTagString(String value) {
 		List<BBCodeTag> tags = new ArrayList<>();
-		Set<Class> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");
+		Set<Class<?>> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");
 		for (String shortname : value.split(",")) {
 			Optional<BBCodeTag> bbcode = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz)))
 					.findFirst().map(clazz -> {
