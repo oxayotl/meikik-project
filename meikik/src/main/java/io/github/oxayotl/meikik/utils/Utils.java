@@ -1,4 +1,4 @@
-package io.github.oxayotl.meikik.urils;
+package io.github.oxayotl.meikik.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,9 +43,21 @@ public class Utils {
 	public static List<BBCodeTag> parseTagString(String value) {
 		List<BBCodeTag> tags = new ArrayList<>();
 		Set<Class<?>> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");
+		if ("all".equals(value)) {
+			List<BBCodeTag> bbcodes = classes.stream().map(clazz -> {
+				try {
+					return (BBCodeTag) clazz.getConstructor().newInstance();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					log.warn("Unable to instantiate BBcode class " + clazz.getCanonicalName(), e);
+					return null;
+				}
+			}).filter(a -> a != null).toList();
+			tags.addAll(bbcodes);
+		}
 		for (String shortname : value.split(",")) {
-			Optional<BBCodeTag> bbcode = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz)))
-					.findFirst().map(clazz -> {
+			List<BBCodeTag> bbcodes = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz)))
+					.map(clazz -> {
 						try {
 							return (BBCodeTag) clazz.getConstructor().newInstance();
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -54,8 +65,12 @@ public class Utils {
 							log.warn("Unable to instantiate BBcode class " + shortname, e);
 							return null;
 						}
-					});
-			bbcode.ifPresentOrElse(tags::add, () -> log.warn("Unspported BBCode shortname: " + shortname));
+					}).filter(a -> a != null).toList();
+			if (bbcodes.isEmpty()) {
+				log.warn("Unspported BBCode shortname: " + shortname);
+			} else {
+				tags.addAll(bbcodes);
+			}
 
 		}
 		return tags;
