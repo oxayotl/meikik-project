@@ -11,6 +11,8 @@ public abstract class BBCodeTag {
 
 	abstract public String shortName();
 
+	abstract public boolean selfContained();
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

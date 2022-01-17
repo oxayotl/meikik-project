@@ -29,4 +29,9 @@ public class Bold extends BBCodeTag {
 		return "b";
 	}
 
+	@Override
+	public boolean selfContained() {
+		return false;
+	}
+
 }

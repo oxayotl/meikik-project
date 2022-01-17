@@ -7,27 +7,32 @@ public class Url extends BBCodeTag {
 
 	@Override
 	public String findOpeningRegEx() {
-		return "\\[url=&quot;(" + urlRegex + ")&quot;]";
+		return "\\[url](" + urlRegex + ")\\[\\/url]";
 	}
 
 	@Override
 	public String buildStartingHtml(String argument) {
-		return "<a target=\"_blank\" href=\"" + argument + "\">";
+		return "<a target=\"_blank\" href=\"" + argument + "\">" + argument + "</a>";
 	}
 
 	@Override
 	public String findClosingTag() {
-		return "[/url]";
+		return null;
 	}
 
 	@Override
 	public String buildEndingHtml() {
-		return "</a>";
+		return null;
 	}
 
 	@Override
 	public String shortName() {
 		return "url";
+	}
+
+	@Override
+	public boolean selfContained() {
+		return true;
 	}
 
 }

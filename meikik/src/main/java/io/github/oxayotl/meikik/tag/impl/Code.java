@@ -2,36 +2,36 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
-public class Italic extends BBCodeTag {
+public class Code extends BBCodeTag {
 
 	@Override
 	public String findOpeningRegEx() {
-		return "\\[i]";
+		return "\\[code](.*?)\\[\\/code]";
 	}
 
 	@Override
 	public String buildStartingHtml(String argument) {
-		return "<i>";
+		return "<pre>" + argument + "</pre>";
 	}
 
 	@Override
 	public String findClosingTag() {
-		return "[/i]";
+		return null;
 	}
 
 	@Override
 	public String buildEndingHtml() {
-		return "</i>";
+		return null;
 	}
 
 	@Override
 	public String shortName() {
-		return "i";
+		return "code";
 	}
 
 	@Override
 	public boolean selfContained() {
-		return false;
+		return true;
 	}
 
 }
