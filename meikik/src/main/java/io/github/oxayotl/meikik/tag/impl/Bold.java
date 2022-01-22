@@ -2,6 +2,12 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * BBCode tag [b]text[/b] to write text in bold
+ *
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Bold extends BBCodeTag {
 
 	@Override

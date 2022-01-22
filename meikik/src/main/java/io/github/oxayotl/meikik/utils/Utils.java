@@ -11,10 +11,17 @@ import java.util.stream.Collectors;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * Utility class to load {@link io.github.oxayotl.meikik.tag.BBCodeTag
+ * BBCodeTag}
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Utils {
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Utils.class);
 
-	public static Set<Class<?>> findAllClassesUsingClassLoader(String packageName) {
+	private static Set<Class<?>> findAllClassesUsingClassLoader(String packageName) {
 		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName))
@@ -40,6 +47,11 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * @param value a string containing comma-separated BBCode shortnames
+	 * @return the corresponding {@link io.github.oxayotl.meikik.tag.BBCodeTag
+	 *         BBCodeTag}
+	 */
 	public static List<BBCodeTag> parseTagString(String value) {
 		List<BBCodeTag> tags = new ArrayList<>();
 		Set<Class<?>> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");

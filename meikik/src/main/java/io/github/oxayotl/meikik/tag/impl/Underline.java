@@ -2,6 +2,12 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * BBCode tag [u]text[/u] to underline text
+ *
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Underline extends BBCodeTag {
 
 	@Override

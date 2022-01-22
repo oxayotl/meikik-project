@@ -12,11 +12,22 @@ import org.thymeleaf.templatemode.TemplateMode;
 import io.github.oxayotl.meikik.processor.impl.BBCodeAttributeTagProcessor;
 import io.github.oxayotl.meikik.processor.impl.BasicFormatAttributeTagProcessor;
 
+/**
+ * The Meikik text dialog, for user-inputed text with or without BBCode
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class TextDialect extends AbstractProcessorDialect {
 
 	private static final String DIALECT_NAME = "Text Dialect";
 	private String defaultTags;
 
+	/**
+	 * @param tags List of tags that are authorized by default when using the
+	 *             {@link io.github.oxayotl.meikik.processor.impl.BBCodeAttributeTagProcessor
+	 *             bbcode} attribute
+	 */
 	public TextDialect(String tags) {
 		// We will set this dialect the same "dialect processor" precedence as
 		// the Standard Dialect, so that processor executions can interleave.
@@ -24,6 +35,7 @@ public class TextDialect extends AbstractProcessorDialect {
 		this.defaultTags = tags;
 	}
 
+	@Override
 	public Set<IProcessor> getProcessors(final String dialectPrefix) {
 		final Set<IProcessor> processors = new HashSet<IProcessor>();
 		processors.add(new BasicFormatAttributeTagProcessor(dialectPrefix));

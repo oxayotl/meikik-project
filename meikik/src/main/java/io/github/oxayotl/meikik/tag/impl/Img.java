@@ -2,6 +2,13 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * BBCode tag [img]https://example.com/picture.png[/img] to make an url pointing
+ * toward an image file into an html &lt;img&gt; element
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Img extends BBCodeTag {
 	static final String urlRegex = "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
 

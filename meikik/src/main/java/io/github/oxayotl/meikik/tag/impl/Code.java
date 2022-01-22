@@ -2,6 +2,12 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * BBCode tag [code]text[/code] to write text in monospace font
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Code extends BBCodeTag {
 
 	@Override

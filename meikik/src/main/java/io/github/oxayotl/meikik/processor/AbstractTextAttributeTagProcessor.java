@@ -14,22 +14,43 @@ import org.thymeleaf.standard.expression.StandardExpressions;
 import org.thymeleaf.templatemode.TemplateMode;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
-import io.github.oxayotl.meikik.urils.Utils;
+import io.github.oxayotl.meikik.utils.Utils;
 
+/**
+ * Abstract method to deal with Spring expression parsing and set up generic
+ * configuration
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public abstract class AbstractTextAttributeTagProcessor extends AbstractAttributeTagProcessor {
-	private static final int PRECEDENCE = 10000;
 
-	public AbstractTextAttributeTagProcessor(final String dialectPrefix, String attributeName) {
+	/**
+	 * Constructor that set up generic configuration for the processor
+	 * 
+	 * @param dialectPrefix Prefix to be applied to name for matching
+	 * @param attributeName Name of the attribute that will be matched
+	 * @param precedence    Precedence (inside dialect's own precedence)
+	 */
+	public AbstractTextAttributeTagProcessor(final String dialectPrefix, String attributeName, int precedence) {
 		super(TemplateMode.HTML, // This processor will apply only to HTML mode
 				dialectPrefix, // Prefix to be applied to name for matching
 				null, // No tag name: match any tag name
 				false, // No prefix to be applied to tag name
 				attributeName, // Name of the attribute that will be matched
 				true, // Apply dialect prefix to attribute name
-				PRECEDENCE, // Precedence (inside dialect's own precedence)
+				precedence, // Precedence (inside dialect's own precedence)
 				true); // Remove the matched attribute afterwards
 	}
 
+	/**
+	 * Function that will return the html string to be put inside the processed tag
+	 * 
+	 * @param attributeContent Already parsed content of the processed attribute
+	 * @param tags             List of BBCode tags allowed. If null, then the
+	 *                         default tags will be allowed instead
+	 * @return The string that will compose the body of the processed tag
+	 */
 	protected abstract String processString(String attributeContent, List<BBCodeTag> tags);
 
 	@Override

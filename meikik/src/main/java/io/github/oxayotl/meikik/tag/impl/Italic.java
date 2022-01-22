@@ -2,6 +2,12 @@ package io.github.oxayotl.meikik.tag.impl;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
+/**
+ * BBCode tag [i]text[/i] to write text in italics
+ *
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class Italic extends BBCodeTag {
 
 	@Override

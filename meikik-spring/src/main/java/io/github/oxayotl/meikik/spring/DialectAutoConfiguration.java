@@ -9,7 +9,7 @@ import io.github.oxayotl.meikik.dialect.TextDialect;
 
 @Configuration
 public class DialectAutoConfiguration {
-	@Value("${meikik.default-allowed-tags:b,i,url}")
+	@Value("${meikik.default-allowed-tags:b,i,u}")
 	private String defaultTags;
 
 	@Bean

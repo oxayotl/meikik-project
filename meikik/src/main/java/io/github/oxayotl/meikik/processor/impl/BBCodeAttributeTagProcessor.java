@@ -9,17 +9,27 @@ import org.thymeleaf.expression.Strings;
 
 import io.github.oxayotl.meikik.domain.TagReplacement;
 import io.github.oxayotl.meikik.processor.AbstractTextAttributeTagProcessor;
-import io.github.oxayotl.meikik.service.TagService;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
-import io.github.oxayotl.meikik.urils.Utils;
+import io.github.oxayotl.meikik.utils.Utils;
 
+/**
+ * Process the 'bbcode' attribute
+ * 
+ * @author Jean-Alexandre Anglès d'Auriac
+ *
+ */
 public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcessor {
 
 	private List<BBCodeTag> defaultTags;
 	private static final String ATTR_NAME = "bbcode";
 
+	/**
+	 * @param dialectPrefix dialectPrefix Prefix to be applied to name for matching
+	 * @param tags          Comma-separated list of shortnames for tags to be
+	 *                      processed by default
+	 */
 	public BBCodeAttributeTagProcessor(final String dialectPrefix, String tags) {
-		super(dialectPrefix, ATTR_NAME);
+		super(dialectPrefix, ATTR_NAME, 2000);
 		defaultTags = Utils.parseTagString(tags);
 	}
 
@@ -46,6 +56,29 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 		return null;
 	}
 
+	private TagReplacement processOpeningRegEx(BBCodeTag tag, String string) {
+		String regex = tag.findOpeningRegEx();
+		Pattern p = Pattern.compile("(" + regex + ")");
+		Matcher m = p.matcher(string);
+		if (m.lookingAt()) {
+			String argument = m.groupCount() == 2 ? m.group(2) : null;
+			String replacement = tag.buildStartingHtml(argument);
+			int replacedCharacters = m.end(1);
+			return new TagReplacement(replacement, replacedCharacters);
+		}
+		return null;
+	}
+
+	private TagReplacement processEndRegEx(BBCodeTag bbTag, String string) {
+		String s = bbTag.findClosingTag();
+		if (string.startsWith(s)) {
+			int replacedCharacters = s.length();
+			String replacement = bbTag.buildEndingHtml();
+			return new TagReplacement(replacement, replacedCharacters);
+		}
+		return null;
+	}
+
 	@Override
 	protected String processString(String attributeContent, List<BBCodeTag> tags) {
 		if (tags == null) {
@@ -64,7 +97,7 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 					BBCodeTag closingTag = findClosingTag(original.substring(i), currentlyOpenedTags);
 					if (closingTag != null) {
 						result.append(original.substring(lastTagIndex, i));
-						TagReplacement tr = TagService.processEndRegEx(closingTag, original.substring(i));
+						TagReplacement tr = processEndRegEx(closingTag, original.substring(i));
 						i += tr.getReplacedCharacters() - 1;
 						lastTagIndex = i + 1;
 						int j;
@@ -83,12 +116,14 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 					BBCodeTag openedTag = findOpeningTag(original.substring(i), tags, currentlyOpenedTags);
 					if (openedTag != null) {
 						result.append(original.substring(lastTagIndex, i));
-						TagReplacement tr = TagService.processOpeningRegEx(openedTag, original.substring(i));
+						TagReplacement tr = processOpeningRegEx(openedTag, original.substring(i));
 						i += tr.getReplacedCharacters() - 1;
 						lastTagIndex = i + 1;
 						result.append(tr.getReplacement());
-						currentlyOpenedTags.add(openedTag);
-						currentlyOpenedTagsHtml.add(tr.getReplacement());
+						if (!openedTag.selfContained()) {
+							currentlyOpenedTags.add(openedTag);
+							currentlyOpenedTagsHtml.add(tr.getReplacement());
+						}
 					}
 				}
 			}
