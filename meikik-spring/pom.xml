@@ -5,8 +5,8 @@
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>spring-boot-starter-meikik</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Meikik (Spring integration)</name>
-	<description></description>
+	<name>Meikik Spring Starter</name>
+	<description>Starter project for Meikik</description>
 
 	<properties>
 		<java.version>1.8</java.version>
