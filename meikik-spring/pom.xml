@@ -4,9 +4,26 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>spring-boot-starter-meikik</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>Meikik Spring Starter</name>
-	<description>Starter project for Meikik</description>
+	<url>https://github.com/oxayotl/meikik-project</url>
+	<description>Starter project for Meikik, a Thymeleaf dialect with simple text formatting possibilities</description>
+	<developers>
+		<developer>
+			<name>Jean-Alexandre Anglès d'Auriac</name>
+			<email>jeanalexandre AT anglesdauriac DOT fr</email>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/oxayotl/meikik-project</url>
+	</scm>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -65,6 +82,13 @@
 							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>true</autoReleaseAfterClose>
 						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>com.thoughtworks.xstream</groupId>
+								<artifactId>xstream</artifactId>
+								<version>1.4.15</version> <!-- apparently this needs to be exactly this version -->
+							</dependency>
+						</dependencies>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
