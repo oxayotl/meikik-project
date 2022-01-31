@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>spring-boot-starter-meikik</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>Meikik Spring Starter</name>
 	<url>https://github.com/oxayotl/meikik-project</url>
 	<description>Starter project for Meikik, a Thymeleaf dialect with simple text formatting possibilities</description>
@@ -38,9 +38,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.temp</groupId>
+			<groupId>io.github.oxayotl</groupId>
 			<artifactId>meikik</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

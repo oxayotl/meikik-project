@@ -64,7 +64,7 @@ public class Utils {
 					log.warn("Unable to instantiate BBcode class " + clazz.getCanonicalName(), e);
 					return null;
 				}
-			}).filter(a -> a != null).toList();
+			}).filter(a -> a != null).collect(Collectors.toList());
 			tags.addAll(bbcodes);
 		}
 		for (String shortname : value.split(",")) {
@@ -77,7 +77,7 @@ public class Utils {
 							log.warn("Unable to instantiate BBcode class " + shortname, e);
 							return null;
 						}
-					}).filter(a -> a != null).toList();
+					}).filter(a -> a != null).collect(Collectors.toList());
 			if (bbcodes.isEmpty()) {
 				log.warn("Unspported BBCode shortname: " + shortname);
 			} else {
