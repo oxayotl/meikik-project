@@ -42,7 +42,7 @@ public class Quote extends BBCodeTagContainer {
 	 */
 	@Override
 	protected String argumentRegexp() {
-		return "(.+?;\\d+?)";
+		return ".+?;\\d+?";
 	}
 
 	/**
@@ -84,10 +84,10 @@ If your project use spring, you can simply add the Meikik starter project as a d
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>spring-boot-starter-meikik</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
-You can now directly use Meikik in your template files. You can add the property `meikik.default-allowed-tags` to select which tags are allowed when `text:balises` is not set, using the same syntax as `text:balises` .
+You can now directly use Meikik in your template files. You can add the property `meikik.default-allowed-tags` to select which tags are allowed when `text:allowed-tags` is not set, using the same syntax as `text:allowed-tags` .
 
 ## Add Meikik without Spring
 
@@ -96,7 +96,7 @@ Start by adding the Meikik dependency to your project.
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>meikik</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
-You can then add the dialect to your `TemplateEngine` by using a constructor where the argument is a string to define which BBCode elements are allowed when `text:balises` is not set, using the same syntax as `text:balises` .
+You can then add the dialect to your `TemplateEngine` by using a constructor where the argument is a string to define which BBCode elements are allowed when `text:allowed-tags` is not set, using the same syntax as `text:allowed-tags` .

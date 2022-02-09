@@ -25,8 +25,8 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Utils {
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Utils.class);
+public class BBCodeTagScanner {
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BBCodeTagScanner.class);
 
 	private static String findShortName(Class<?> clazz) {
 		try {
@@ -43,7 +43,7 @@ public class Utils {
 	 * @return the corresponding {@link io.github.oxayotl.meikik.tag.BBCodeTag
 	 *         BBCodeTag}
 	 */
-	public static List<BBCodeTag> parseTagString(String value) {
+	public static List<BBCodeTag> findTagsFromString(String value) {
 		List<BBCodeTag> tags = new ArrayList<>();
 		Collection<URL> allPackagePrefixes = Arrays.stream(Package.getPackages()).map(p -> p.getName())
 				.map(s -> s.split("\\.")[0]).distinct().map(s -> ClasspathHelper.forPackage(s)).reduce((c1, c2) -> {

@@ -14,7 +14,7 @@ import org.thymeleaf.standard.expression.StandardExpressions;
 import org.thymeleaf.templatemode.TemplateMode;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
-import io.github.oxayotl.meikik.utils.Utils;
+import io.github.oxayotl.meikik.utils.BBCodeTagScanner;
 
 /**
  * Abstract method to deal with Spring expression parsing and set up generic
@@ -77,7 +77,7 @@ public abstract class AbstractTextAttributeTagProcessor extends AbstractAttribut
 		String value = tag.getAttributeValue(getDialectPrefix(), "allowed-tags");
 		List<BBCodeTag> tags = null;
 		if (value != null) {
-			tags = Utils.parseTagString(value);
+			tags = BBCodeTagScanner.findTagsFromString(value);
 		}
 		structureHandler.setBody(processString(content, tags), false);
 	}

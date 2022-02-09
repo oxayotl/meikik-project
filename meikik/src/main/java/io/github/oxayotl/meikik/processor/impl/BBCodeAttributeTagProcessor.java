@@ -10,7 +10,7 @@ import org.thymeleaf.expression.Strings;
 import io.github.oxayotl.meikik.domain.TagReplacement;
 import io.github.oxayotl.meikik.processor.AbstractTextAttributeTagProcessor;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
-import io.github.oxayotl.meikik.utils.Utils;
+import io.github.oxayotl.meikik.utils.BBCodeTagScanner;
 
 /**
  * Process the 'bbcode' attribute
@@ -30,7 +30,7 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 	 */
 	public BBCodeAttributeTagProcessor(final String dialectPrefix, String tags) {
 		super(dialectPrefix, ATTR_NAME, 2000);
-		defaultTags = Utils.parseTagString(tags);
+		defaultTags = BBCodeTagScanner.findTagsFromString(tags);
 	}
 
 	private BBCodeTag findOpeningTag(String substring, List<BBCodeTag> tags, List<BBCodeTag> currentlyOpenedTags) {
