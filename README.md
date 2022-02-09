@@ -22,3 +22,64 @@ Currently available tags :
 * `img` : `[img]https://example.com/picture.png[/img]` to make an url pointing toward an image file into an html &lt;img&gt; element
 * `url` : `[url]https://example-url.com[/url]` to make an url into a clickable link, and `[url="https://example-url.com"]text[/url]` to turn text into a clickable url pointing toward example-url.com
 * `all` : a shortcut to allow all the above BBCode tags
+
+# Add a custom BBCode tag
+
+Meikik comes with some common BBCode tag directly implemented, but it also allows you to easily implement some custom tags. This can be useful not only for implementing bespoke BBCode tags, but also to provide a custom implementation for some BBCode tags that are heavily dependent on the context of your own project. For instance, if you want to create your own message board and to implement the `[quote]`, the exact generated html is going to be highly dependent on what kind of html the css expects for the quote block, and possibly how your message board will handle creating a link toward a specific message.
+Here is a commented example for such an implementation :
+```
+
+import io.github.oxayotl.meikik.tag.BBCodeTag;
+
+public class Quote extends BBCodeTag {
+
+	/**
+	 * We check check for an opening tag [quote="Username;messageId"]. Since the
+	 * regexp will be matched against already html-encoded text, we replace the " by
+	 * &quot;
+	 */
+	@Override
+	public String findOpeningRegEx() {
+		return "\\[quote=&quot;(.+?;\\d+?)&quot;]";
+	}
+
+	/**
+	 * We parse the argument and create the corresponding html.
+	 */
+	@Override
+	public String buildStartingHtml(String argument) {
+		String username = argument.substring(0, argument.lastIndexOf(';'));
+		String messageId = argument.substring(argument.lastIndexOf(';') + 1);
+		return "<div class=\"quoteblock\"><div class=\"quote_author\"><a href=\"/messageById/" + messageId + "\">"
+				+ username + " wrote </a></div>";
+	}
+
+	@Override
+	public String findClosingTag() {
+		return "[/quote]";
+	}
+
+	@Override
+	public String buildEndingHtml() {
+		return "</div>";
+	}
+
+	/**
+	 * The shortname of the tag is there to denote if the tag is allowed to be used
+	 * in any specific field
+	 */
+	@Override
+	public String shortName() {
+		return "quote";
+	}
+
+	/**
+	 * This tag can contain other tags
+	 */
+	@Override
+	public boolean selfContained() {
+		return false;
+	}
+
+}
+```
