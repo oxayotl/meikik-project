@@ -1,13 +1,19 @@
 package io.github.oxayotl.meikik.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
@@ -20,22 +26,6 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  */
 public class Utils {
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Utils.class);
-
-	private static Set<Class<?>> findAllClassesUsingClassLoader(String packageName) {
-		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName))
-				.collect(Collectors.toSet());
-	}
-
-	private static Class<?> getClass(String className, String packageName) {
-		try {
-			return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
-		} catch (ClassNotFoundException e) {
-			// handle the exception
-		}
-		return null;
-	}
 
 	private static String findShortName(Class<?> clazz) {
 		try {
@@ -54,7 +44,22 @@ public class Utils {
 	 */
 	public static List<BBCodeTag> parseTagString(String value) {
 		List<BBCodeTag> tags = new ArrayList<>();
-		Set<Class<?>> classes = findAllClassesUsingClassLoader("io.github.oxayotl.meikik.tag.impl");
+		Collection<URL> allPackagePrefixes = Arrays.stream(Package.getPackages()).map(p -> p.getName())
+				.map(s -> s.split("\\.")[0]).distinct().map(s -> ClasspathHelper.forPackage(s)).reduce((c1, c2) -> {
+					Collection<URL> c3 = new HashSet<>();
+					c3.addAll(c1);
+					c3.addAll(c2);
+					return c3;
+				}).get();
+		ConfigurationBuilder config = new ConfigurationBuilder().addUrls(allPackagePrefixes)
+				.addScanners(Scanners.SubTypes);
+		Reflections reflections = new Reflections(config);
+
+		// Reflections reflections = new
+		// Reflections(ClasspathHelper.forPackage("io.github.oxayotl.meikik"),
+//				Scanners.SubTypes);
+		Set<Class<? extends BBCodeTag>> classes = reflections.getSubTypesOf(BBCodeTag.class);
+
 		if ("all".equals(value)) {
 			List<BBCodeTag> bbcodes = classes.stream().map(clazz -> {
 				try {
@@ -65,7 +70,7 @@ public class Utils {
 					return null;
 				}
 			}).filter(a -> a != null).collect(Collectors.toList());
-			tags.addAll(bbcodes);
+			return bbcodes;
 		}
 		for (String shortname : value.split(",")) {
 			List<BBCodeTag> bbcodes = classes.stream().filter(clazz -> shortname.equals(findShortName(clazz)))
@@ -79,7 +84,7 @@ public class Utils {
 						}
 					}).filter(a -> a != null).collect(Collectors.toList());
 			if (bbcodes.isEmpty()) {
-				log.warn("Unspported BBCode shortname: " + shortname);
+				log.warn("Unsupported BBCode shortname: " + shortname);
 			} else {
 				tags.addAll(bbcodes);
 			}
