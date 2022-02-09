@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
 /**
  * BBCode tag [i]text[/i] to write text in italics
@@ -8,11 +8,15 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Italic extends BBCodeTag {
+public class Italic extends BBCodeTagContainer {
+	@Override
+	public String shortName() {
+		return "i";
+	}
 
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[i]";
+	protected String argumentRegexp() {
+		return null;
 	}
 
 	@Override
@@ -21,23 +25,7 @@ public class Italic extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return "[/i]";
-	}
-
-	@Override
 	public String buildEndingHtml() {
 		return "</i>";
 	}
-
-	@Override
-	public String shortName() {
-		return "i";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return false;
-	}
-
 }

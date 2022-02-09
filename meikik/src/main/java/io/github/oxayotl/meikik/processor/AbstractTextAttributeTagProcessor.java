@@ -74,7 +74,7 @@ public abstract class AbstractTextAttributeTagProcessor extends AbstractAttribut
 		 * Execute the expression just parsed
 		 */
 		final String content = (String) expression.execute(context);
-		String value = tag.getAttributeValue(getDialectPrefix(), "balises");
+		String value = tag.getAttributeValue(getDialectPrefix(), "allowed-tags");
 		List<BBCodeTag> tags = null;
 		if (value != null) {
 			tags = Utils.parseTagString(value);

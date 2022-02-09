@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagFinal;
 
 /**
  * BBCode tag [url]https://example-url.com[/url] to make an url into a clickable
@@ -9,12 +9,10 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Url extends BBCodeTag {
-	static final String urlRegex = "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
-
+public class Url extends BBCodeTagFinal {
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[url](" + urlRegex + ")\\[\\/url]";
+	protected String argumentRegexp() {
+		return "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
 	}
 
 	@Override
@@ -23,23 +21,8 @@ public class Url extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return null;
-	}
-
-	@Override
-	public String buildEndingHtml() {
-		return null;
-	}
-
-	@Override
 	public String shortName() {
 		return "url";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return true;
 	}
 
 }

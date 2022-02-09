@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
 /**
  * BBCode tag [s]text[/s] to write striked through text
@@ -8,11 +8,15 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class StrikeThrough extends BBCodeTag {
+public class StrikeThrough extends BBCodeTagContainer {
+	@Override
+	public String shortName() {
+		return "s";
+	}
 
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[s]";
+	protected String argumentRegexp() {
+		return null;
 	}
 
 	@Override
@@ -21,23 +25,7 @@ public class StrikeThrough extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return "[/s]";
-	}
-
-	@Override
 	public String buildEndingHtml() {
 		return "</del>";
 	}
-
-	@Override
-	public String shortName() {
-		return "s";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return false;
-	}
-
 }

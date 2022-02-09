@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagFinal;
 
 /**
  * BBCode tag [img]https://example.com/picture.png[/img] to make an url pointing
@@ -9,12 +9,10 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Img extends BBCodeTag {
-	static final String urlRegex = "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
-
+public class Img extends BBCodeTagFinal {
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[img](" + urlRegex + ")\\[\\/img]";
+	protected String argumentRegexp() {
+		return "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
 	}
 
 	@Override
@@ -23,23 +21,8 @@ public class Img extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return null;
-	}
-
-	@Override
-	public String buildEndingHtml() {
-		return null;
-	}
-
-	@Override
 	public String shortName() {
 		return "img";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return true;
 	}
 
 }

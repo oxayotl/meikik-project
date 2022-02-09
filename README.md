@@ -7,7 +7,7 @@ Meikik is a Thymeleaf dialect designed to facilitate the inclusion of user-input
 Meikik provides three new tag attributes, 
 * `text:basic` simply ensures that new lines from the input string are still visible in your website, by replacing them with <br> tags
 * `text:bbcode` works similarly to `text:basic` but also support translating into html a variety of BBcode tags like `[b]text in bold[/b]` and `[url="https://www.wikipedia.org/"]Link to the best website[/url]`.
-* `text:balises` is used in conjunction with `text:bbcode` to overload which BBCode tags will be interprated from the default value provided to the Dialog constructor.
+* `text:allowed-tags` is used in conjunction with `text:bbcode` to overload which BBCode tags will be interprated from the default value provided to the Dialog constructor.
 
 Meikik also comes with a Spring Boot Starter project for easier configuration.
 
@@ -28,23 +28,25 @@ Currently available tags :
 Meikik comes with some common BBCode tag directly implemented, but it also allows you to easily implement some custom tags. This can be useful not only for implementing bespoke BBCode tags, but also to provide a custom implementation for some BBCode tags that are heavily dependent on the context of your own project. For instance, if you want to create your own message board and to implement the `[quote]`, the exact generated html is going to be highly dependent on what kind of html the css expects for the quote block, and possibly how your message board will handle creating a link toward a specific message.
 Here is a commented example for such an implementation :
 ```
+import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
-
-public class Quote extends BBCodeTag {
-
+/**
+ * We are extending BBCodeTagContainer rather than BBCodeTagFinal because the
+ * [quote] tag can include other BBCode tags, for instance [quote="Meikik;1"]I'm
+ * [b]yelling[/b][/quote]
+ */
+public class Quote extends BBCodeTagContainer {
 	/**
-	 * We check check for an opening tag [quote="Username;messageId"]. Since the
-	 * regexp will be matched against already html-encoded text, we replace the " by
-	 * &quot;
+	 * We check check for an opening tag [quote="Username;messageId"], were
+	 * messageId is a number
 	 */
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[quote=&quot;(.+?;\\d+?)&quot;]";
+	protected String argumentRegexp() {
+		return "(.+?;\\d+?)";
 	}
 
 	/**
-	 * We parse the argument and create the corresponding html.
+	 * We parse the argument and return the corresponding opening html.
 	 */
 	@Override
 	public String buildStartingHtml(String argument) {
@@ -54,31 +56,21 @@ public class Quote extends BBCodeTag {
 				+ username + " wrote </a></div>";
 	}
 
-	@Override
-	public String findClosingTag() {
-		return "[/quote]";
-	}
-
+	/**
+	 * We return the ending html.
+	 */
 	@Override
 	public String buildEndingHtml() {
 		return "</div>";
 	}
 
 	/**
-	 * The shortname of the tag is there to denote if the tag is allowed to be used
-	 * in any specific field
+	 * The shortname of the tag is used to both parse the text looking for the tag,
+	 * and for selecting the tag in
 	 */
 	@Override
 	public String shortName() {
 		return "quote";
-	}
-
-	/**
-	 * This tag can contain other tags
-	 */
-	@Override
-	public boolean selfContained() {
-		return false;
 	}
 
 }

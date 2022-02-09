@@ -9,7 +9,10 @@ package io.github.oxayotl.meikik.tag;
 public abstract class BBCodeTag {
 	/**
 	 * @return A regular expression that matches this BBCode opening tag, or this
-	 *         entire BBCode tag if {@link #selfContained()} is true
+	 *         entire BBCode tag if {@link #selfContained()} is true. If the tag
+	 *         accepts an argument, it must be contained within the first group.
+	 *         Note that this regular expression is matched against an html-escaped
+	 *         string
 	 */
 	abstract public String findOpeningRegEx();
 

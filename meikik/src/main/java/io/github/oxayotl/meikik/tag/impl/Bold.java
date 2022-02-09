@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
 /**
  * BBCode tag [b]text[/b] to write text in bold
@@ -8,11 +8,16 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Bold extends BBCodeTag {
+public class Bold extends BBCodeTagContainer {
 
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[b]";
+	public String shortName() {
+		return "b";
+	}
+
+	@Override
+	protected String argumentRegexp() {
+		return null;
 	}
 
 	@Override
@@ -21,23 +26,7 @@ public class Bold extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return "[/b]";
-	}
-
-	@Override
 	public String buildEndingHtml() {
 		return "</b>";
 	}
-
-	@Override
-	public String shortName() {
-		return "b";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return false;
-	}
-
 }

@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagFinal;
 
 /**
  * BBCode tag [code]text[/code] to write text in monospace font
@@ -8,11 +8,10 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class Code extends BBCodeTag {
-
+public class Code extends BBCodeTagFinal {
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[code](.*?)\\[\\/code]";
+	protected String argumentRegexp() {
+		return ".*?";
 	}
 
 	@Override
@@ -21,23 +20,7 @@ public class Code extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return null;
-	}
-
-	@Override
-	public String buildEndingHtml() {
-		return null;
-	}
-
-	@Override
 	public String shortName() {
 		return "code";
 	}
-
-	@Override
-	public boolean selfContained() {
-		return true;
-	}
-
 }

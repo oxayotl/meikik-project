@@ -1,6 +1,7 @@
 package io.github.oxayotl.meikik.utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class Utils {
 		// Reflections(ClasspathHelper.forPackage("io.github.oxayotl.meikik"),
 //				Scanners.SubTypes);
 		Set<Class<? extends BBCodeTag>> classes = reflections.getSubTypesOf(BBCodeTag.class);
+		classes.removeIf(clazz -> Modifier.isAbstract(clazz.getModifiers()));
 
 		if ("all".equals(value)) {
 			List<BBCodeTag> bbcodes = classes.stream().map(clazz -> {

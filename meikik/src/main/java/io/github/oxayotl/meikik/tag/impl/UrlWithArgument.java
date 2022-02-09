@@ -1,6 +1,6 @@
 package io.github.oxayotl.meikik.tag.impl;
 
-import io.github.oxayotl.meikik.tag.BBCodeTag;
+import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
 /**
  * BBCode tag [url="https://example-url.com"]My text[/url] to turn "my text"
@@ -9,12 +9,15 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class UrlWithArgument extends BBCodeTag {
-	static final String urlRegex = "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
+public class UrlWithArgument extends BBCodeTagContainer {
+	@Override
+	public String shortName() {
+		return "url";
+	}
 
 	@Override
-	public String findOpeningRegEx() {
-		return "\\[url=&quot;(" + urlRegex + ")&quot;]";
+	protected String argumentRegexp() {
+		return "https?://[-a-zA-Z0-9@:%._\\+~#=/?&]+";
 	}
 
 	@Override
@@ -23,23 +26,8 @@ public class UrlWithArgument extends BBCodeTag {
 	}
 
 	@Override
-	public String findClosingTag() {
-		return "[/url]";
-	}
-
-	@Override
 	public String buildEndingHtml() {
 		return "</a>";
-	}
-
-	@Override
-	public String shortName() {
-		return "url";
-	}
-
-	@Override
-	public boolean selfContained() {
-		return false;
 	}
 
 }
