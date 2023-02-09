@@ -1,14 +1,25 @@
-package io.github.oxayotl.meikik.processor.impl;
+package io.github.oxayotl.meikik.processor;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.thymeleaf.IEngineConfiguration;
+import org.thymeleaf.context.ITemplateContext;
+import org.thymeleaf.engine.AttributeName;
 import org.thymeleaf.expression.Strings;
+import org.thymeleaf.model.IProcessableElementTag;
+import org.thymeleaf.processor.element.AbstractAttributeTagProcessor;
+import org.thymeleaf.processor.element.IElementTagStructureHandler;
+import org.thymeleaf.standard.expression.IStandardExpression;
+import org.thymeleaf.standard.expression.IStandardExpressionParser;
+import org.thymeleaf.standard.expression.StandardExpressions;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import io.github.oxayotl.meikik.domain.TagReplacement;
-import io.github.oxayotl.meikik.processor.AbstractTextAttributeTagProcessor;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 import io.github.oxayotl.meikik.utils.BBCodeTagScanner;
 
@@ -18,22 +29,36 @@ import io.github.oxayotl.meikik.utils.BBCodeTagScanner;
  * @author Jean-Alexandre Anglès d'Auriac
  *
  */
-public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcessor {
+public class BBCodeAttributeTagProcessor extends AbstractAttributeTagProcessor {
 
-	private List<BBCodeTag> defaultTags;
+	private Collection<BBCodeTag> availableTags;
+	private Collection<BBCodeTag> defaultTags;
 	private static final String ATTR_NAME = "bbcode";
 
 	/**
 	 * @param dialectPrefix dialectPrefix Prefix to be applied to name for matching
-	 * @param tags          Comma-separated list of shortnames for tags to be
+	 * @param defaultTags   Comma-separated list of shortnames for tags to be
 	 *                      processed by default
+	 * @param availableTags Collection of one instance for each custom
+	 *                      BBCodeTag-extending classes that should be available in
+	 *                      the dialect
 	 */
-	public BBCodeAttributeTagProcessor(final String dialectPrefix, String tags) {
-		super(dialectPrefix, ATTR_NAME, 2000);
-		defaultTags = BBCodeTagScanner.findTagsFromString(tags);
+	public BBCodeAttributeTagProcessor(final String dialectPrefix, String defaultTags,
+			Collection<BBCodeTag> availableTags) {
+		super(TemplateMode.HTML, // This processor will apply only to HTML mode
+				dialectPrefix, // Prefix to be applied to name for matching
+				null, // No tag name: match any tag name
+				false, // No prefix to be applied to tag name
+				ATTR_NAME, // Name of the attribute that will be matched
+				true, // Apply dialect prefix to attribute name
+				2000, // Precedence (inside dialect's own precedence)
+				true); // Remove the matched attribute afterwards
+		this.availableTags = availableTags;
+		this.defaultTags = BBCodeTagScanner.findTagsFromString(defaultTags, this.availableTags);
 	}
 
-	private BBCodeTag findOpeningTag(String substring, List<BBCodeTag> tags, List<BBCodeTag> currentlyOpenedTags) {
+	private BBCodeTag findOpeningTag(String substring, Collection<BBCodeTag> tags,
+			List<BBCodeTag> currentlyOpenedTags) {
 		List<BBCodeTag> potentialTags = new ArrayList<>(tags);
 		potentialTags.removeAll(currentlyOpenedTags);
 		for (BBCodeTag tag : potentialTags) {
@@ -79,13 +104,19 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 		return null;
 	}
 
-	@Override
-	protected String processString(String attributeContent, List<BBCodeTag> tags) {
+	/**
+	 * Function that will return the html string to be put inside the processed tag
+	 * 
+	 * @param attributeContent Already parsed content of the processed attribute
+	 * @param tags             List of BBCode tags allowed. If null, then the
+	 *                         default tags will be allowed instead
+	 * @return The string that will compose the body of the processed tag
+	 */
+	protected String processString(String attributeContent, Collection<BBCodeTag> tags) {
 		if (tags == null) {
 			tags = defaultTags;
 		}
 		String original = new Strings(null).escapeXml(attributeContent);
-		original = original.replace(System.getProperty("line.separator"), "<br />");
 
 		StringBuilder result = new StringBuilder();
 		int lastTagIndex = 0;
@@ -130,18 +161,42 @@ public class BBCodeAttributeTagProcessor extends AbstractTextAttributeTagProcess
 		}
 		result.append(original.substring(lastTagIndex));
 
-//		if (tags.contains(Tag.I)) {
-//			original = original.replaceAll("\\[i](.*?)\\[/i]", "<i>$1</i>");
-//		}
-//		if (tags.contains(Tag.B)) {
-//			original = original.replaceAll("\\[b](.*?)\\[/b]", "<b>$1</b>");
-//		}
-//		if (tags.contains(Tag.URL)) {
-//			original = original.replaceAll("\\[url=&quot;(.*?)&quot;](.*?)\\[/url]",
-//					"<a target=\"_blank\" href=\"$1\">$2</a>");
-//		}
+		while (!currentlyOpenedTags.isEmpty()) {
+			Collections.reverse(currentlyOpenedTagsHtml);
+			currentlyOpenedTags.forEach(tag -> result.append(tag.buildEndingHtml()));
+		}
+
 		return result.toString();
 
+	}
+
+	@Override
+	protected void doProcess(final ITemplateContext context, final IProcessableElementTag tag,
+			final AttributeName attributeName, final String attributeValue,
+			final IElementTagStructureHandler structureHandler) {
+
+		final IEngineConfiguration configuration = context.getConfiguration();
+
+		/*
+		 * Obtain the Thymeleaf Standard Expression parser
+		 */
+		final IStandardExpressionParser parser = StandardExpressions.getExpressionParser(configuration);
+
+		/*
+		 * Parse the attribute value as a Thymeleaf Standard Expression
+		 */
+		final IStandardExpression expression = parser.parseExpression(context, attributeValue);
+
+		/*
+		 * Execute the expression just parsed
+		 */
+		final String content = (String) expression.execute(context);
+		String value = tag.getAttributeValue(getDialectPrefix(), "allowed-tags");
+		Collection<BBCodeTag> tags = null;
+		if (value != null) {
+			tags = BBCodeTagScanner.findTagsFromString(value, this.availableTags);
+		}
+		structureHandler.setBody(processString(content, tags), false);
 	}
 
 }

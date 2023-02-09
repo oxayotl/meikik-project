@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>meikik</artifactId>
-	<version>0.9.1</version>
+	<version>0.9.2</version>
 	<name>Meikik</name>
 	<url>https://github.com/oxayotl/meikik-project</url>
-	<description>A Thymeleaf dialect with simple text formatting possibilities</description>
+	<description>A Thymeleaf dialect for BBCode support.</description>
 	<developers>
 		<developer>
 			<name>Jean-Alexandre Anglès d'Auriac</name>

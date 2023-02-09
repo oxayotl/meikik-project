@@ -1,0 +1,32 @@
+<html>
+<head>
+	<style>
+		.post {
+			border: 2px solid;
+			margin: 2px;
+		}
+		.author, .quote_author {
+			background: lightblue;
+		}
+		
+		.message {
+			white-space: pre-wrap;
+		}
+		
+		.quoteblock {
+			background: lightpink;
+			margin: 3px;
+			border: 1px solid;
+		}
+	</style>
+</head>
+<body>
+	<div th:each="message : ${messages}" th:id="${'message-' + message.id}" class="post">
+		<div th:text="${message.username}" class="author"></div>
+		<div text:bbcode="${message.text}" text:allowed-tags="b,quote" class="message">
+			Toto
+		</div>
+	</div>
+	
+</body>
+</html>

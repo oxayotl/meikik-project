@@ -1,19 +1,24 @@
 # Meikik
 
-Meikik is a Thymeleaf dialect designed to facilitate the inclusion of user-inputted text into your website. 
+Meikik is a Thymeleaf dialect designed to facilitate the inclusion of BBCode-formated text into your website. 
 
 # Usage
 
-Meikik provides three new tag attributes, 
-* `text:basic` simply ensures that new lines from the input string are still visible in your website, by replacing them with <br> tags
-* `text:bbcode` works similarly to `text:basic` but also support translating into html a variety of BBcode tags like `[b]text in bold[/b]` and `[url="https://www.wikipedia.org/"]Link to the best website[/url]`.
-* `text:allowed-tags` is used in conjunction with `text:bbcode` to overload which BBCode tags will be interprated from the default value provided to the Dialog constructor.
+Meikik provides two new tag attributes, 
+* `text:bbcode` translate into HTML code a variety of BBcode tags like `[b]text in bold[/b]` and `[url="https://www.wikipedia.org/"]Link to the best website[/url]`.
+* `text:allowed-tags` is used in conjunction with `text:bbcode` to specify which tag categories should be translated into HTML code. If this tag is not present, a configurable default value will be used instead.
 
-Meikik also comes with a Spring Boot Starter project for easier configuration.
+Usage example:
+
+```
+<div text:bbcode="${someBBcodeText}" text:allowed-tags="b,url">
+	BBCode text
+</div>
+```
 
 # Available BBCode tags
 
-Currently available tags :
+Implemented tags :
 * `b` : `[b]text[/b]` to write text in bold
 * `i` : `[i]text[/i]` to write text in italics
 * `u` : `[u]text[/u]` to write text underlined
@@ -23,10 +28,40 @@ Currently available tags :
 * `url` : `[url]https://example-url.com[/url]` to make an url into a clickable link, and `[url="https://example-url.com"]text[/url]` to turn text into a clickable url pointing toward example-url.com
 * `all` : a shortcut to allow all the above BBCode tags
 
+# Adding Meikik to your project
+ 
+## Add Meikik using a Spring boot starter project
+
+If your project use spring, you can simply add the Meikik starter project as a dependency.
+
+```
+<dependency>
+    <groupId>io.github.oxayotl</groupId>
+    <artifactId>spring-boot-starter-meikik</artifactId>
+    <version>0.9.2</version>
+</dependency>
+```
+
+You can now directly use Meikik in your template files. You can add the property `meikik.default-allowed-tags` to select which tags are allowed when `text:allowed-tags` is not set, using the same syntax as `text:allowed-tags` .
+
+
+## Add Meikik without Spring
+
+Start by adding the Meikik dependency to your project.
+```
+<dependency>
+    <groupId>io.github.oxayotl</groupId>
+    <artifactId>meikik</artifactId>
+    <version>0.9.1</version>
+</dependency>
+```
+You can then add the dialect to your `TemplateEngine`.
+
 # Add a custom BBCode tag
 
-Meikik comes with some common BBCode tag directly implemented, but it also allows you to easily implement some custom tags. This can be useful not only for implementing bespoke BBCode tags, but also to provide a custom implementation for some BBCode tags that are heavily dependent on the context of your own project. For instance, if you want to create your own message board and to implement the `[quote]`, the exact generated html is going to be highly dependent on what kind of html the css expects for the quote block, and possibly how your message board will handle creating a link toward a specific message.
-Here is a commented example for such an implementation :
+Meikik comes with some common BBCode tag directly implemented, but it also allows you to easily implement some custom tags. This can be useful not only for implementing bespoke BBCode tags, but also to provide a custom implementation for some BBCode tags that are heavily dependent on the context of your own project. For instance, if you want to create your own message board and to implement the `[quote]`, the exact generated HTML is going to be highly dependent on what kind of HTML the CSS expects for the quote block, and possibly how your message board handle creating a link toward a specific message.
+Here is an example for such an implementation :
+
 ```
 import io.github.oxayotl.meikik.tag.BBCodeTagContainer;
 
@@ -75,28 +110,5 @@ public class Quote extends BBCodeTagContainer {
 
 }
 ```
- # Adding Meikik to your project
- 
- ## Add Meikik using Spring
 
-If your project use spring, you can simply add the Meikik starter project as a dependency.
-```
-<dependency>
-    <groupId>io.github.oxayotl</groupId>
-    <artifactId>spring-boot-starter-meikik</artifactId>
-    <version>0.9.1</version>
-</dependency>
-```
-You can now directly use Meikik in your template files. You can add the property `meikik.default-allowed-tags` to select which tags are allowed when `text:allowed-tags` is not set, using the same syntax as `text:allowed-tags` .
-
-## Add Meikik without Spring
-
-Start by adding the Meikik dependency to your project.
-```
-<dependency>
-    <groupId>io.github.oxayotl</groupId>
-    <artifactId>meikik</artifactId>
-    <version>0.9.1</version>
-</dependency>
-```
-You can then add the dialect to your `TemplateEngine` by using a constructor where the argument is a string to define which BBCode elements are allowed when `text:allowed-tags` is not set, using the same syntax as `text:allowed-tags` .
+If you are using the Spring boot starter project, you just need to annotate your custom BBCode classes with `@Component` to be able to use them just like you would use the base ones. If you do not use the starter project, then you should provide one instance of each custom BBCodeTag class in the second parameter of MeikikDialect.
