@@ -52,7 +52,7 @@ Start by adding the Meikik dependency to your project.
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>meikik</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
 </dependency>
 ```
 You can then add the dialect to your `TemplateEngine`.
@@ -112,3 +112,7 @@ public class Quote extends BBCodeTagContainer {
 ```
 
 If you are using the Spring boot starter project, you just need to annotate your custom BBCode classes with `@Component` to be able to use them just like you would use the base ones. If you do not use the starter project, then you should provide one instance of each custom BBCodeTag class in the second parameter of MeikikDialect.
+
+# Example project
+
+This repository also include an example project of how to use Meikik.
