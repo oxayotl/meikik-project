@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>meikik-example-project</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>meikik-example-project</name>
 	<description>Meikik example project</description>
 	<properties>
