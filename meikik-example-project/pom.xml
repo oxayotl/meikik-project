@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>meikik-example-project</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>meikik-example-project</name>
 	<description>Meikik example project</description>
 	<properties>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>io.github.oxayotl</groupId>
 			<artifactId>spring-boot-starter-meikik</artifactId>
-			<version>0.9.2</version>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
 

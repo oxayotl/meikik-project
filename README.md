@@ -6,6 +6,7 @@ Meikik is a Thymeleaf dialect designed to facilitate the inclusion of BBCode-for
 
 Meikik provides two new tag attributes, 
 * `text:bbcode` translate into HTML code a variety of BBcode tags like `[b]text in bold[/b]` and `[url="https://www.wikipedia.org/"]Link to the best website[/url]`.
+* `text:ubbcode` works as `text:bbcode` but doesn't escape any xml before translating BBcode tags into html.
 * `text:allowed-tags` is used in conjunction with `text:bbcode` to specify which tag categories should be translated into HTML code. If this tag is not present, a configurable default value will be used instead.
 
 Usage example:
@@ -38,7 +39,7 @@ If your project use spring, you can simply add the Meikik starter project as a d
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>spring-boot-starter-meikik</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -52,7 +53,7 @@ Start by adding the Meikik dependency to your project.
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>meikik</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 You can then add the dialect to your `TemplateEngine`.

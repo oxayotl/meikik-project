@@ -11,6 +11,7 @@ import org.thymeleaf.standard.processor.StandardXmlNsTagProcessor;
 import org.thymeleaf.templatemode.TemplateMode;
 
 import io.github.oxayotl.meikik.processor.BBCodeAttributeTagProcessor;
+import io.github.oxayotl.meikik.processor.UBBCodeAttributeTagProcessor;
 import io.github.oxayotl.meikik.tag.BBCodeTag;
 
 /**
@@ -44,6 +45,7 @@ public class MeikikDialect extends AbstractProcessorDialect {
 	public Set<IProcessor> getProcessors(final String dialectPrefix) {
 		final Set<IProcessor> processors = new HashSet<IProcessor>();
 		processors.add(new BBCodeAttributeTagProcessor(dialectPrefix, defaultTags, availableTags));
+		processors.add(new UBBCodeAttributeTagProcessor(dialectPrefix, defaultTags, availableTags));
 		// This will remove the xmlns:score attributes we might add for IDE validation
 		processors.add(new StandardXmlNsTagProcessor(TemplateMode.HTML, dialectPrefix));
 		return processors;
