@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oxayotl</groupId>
 	<artifactId>spring-boot-starter-meikik</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<name>Meikik Spring Starter</name>
 	<url>https://github.com/oxayotl/meikik-project</url>
 	<description>Starter project for Meikik, a Thymeleaf dialect for BBCode support.</description>
