@@ -39,7 +39,7 @@ If your project use spring, you can simply add the Meikik starter project as a d
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>spring-boot-starter-meikik</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -53,7 +53,7 @@ Start by adding the Meikik dependency to your project.
 <dependency>
     <groupId>io.github.oxayotl</groupId>
     <artifactId>meikik</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 You can then add the dialect to your `TemplateEngine`.
