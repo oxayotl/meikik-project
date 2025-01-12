@@ -32,7 +32,7 @@ public class UBBCodeAttributeTagProcessor extends AbstractAttributeTagProcessor 
 
 	private Collection<BBCodeTag> availableTags;
 	private Collection<BBCodeTag> defaultTags;
-	private static final String ATTR_NAME = "ubbcode";
+	private static final String ATTR_NAME = "utext";
 
 	/**
 	 * @param dialectPrefix dialectPrefix Prefix to be applied to name for matching

@@ -36,7 +36,7 @@ public class MeikikDialect extends AbstractProcessorDialect {
 	public MeikikDialect(String tags, Collection<BBCodeTag> availableTags) {
 		// We will set this dialect the same "dialect processor" precedence as
 		// the Standard Dialect, so that processor executions can interleave.
-		super(DIALECT_NAME, "text", StandardDialect.PROCESSOR_PRECEDENCE);
+		super(DIALECT_NAME, "bbcode", StandardDialect.PROCESSOR_PRECEDENCE);
 		this.defaultTags = tags;
 		this.availableTags = availableTags;
 	}

@@ -1,7 +1,8 @@
 package io.github.oxayotl.meikik.tag;
 
 /**
- * Implement this class to add a BBCode tag that can contain other BBCode tags
+ * Implement this class to add a BBCode tag that cannot contain other BBCode
+ * tags
  * 
  * @author oxayotl
  *

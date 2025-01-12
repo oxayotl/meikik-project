@@ -14,7 +14,7 @@ import io.github.oxayotl.meikik.tag.BBCodeTag;
  */
 public class BBCodeAttributeTagProcessor extends UBBCodeAttributeTagProcessor {
 
-	private static final String ATTR_NAME = "bbcode";
+	private static final String ATTR_NAME = "text";
 
 	/**
 	 * @param dialectPrefix dialectPrefix Prefix to be applied to name for matching
